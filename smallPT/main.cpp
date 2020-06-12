@@ -10,7 +10,7 @@
 #include <stdlib.h> // Make : g++ -O3 smallpt.cpp -o smallpt
 #include <stdio.h>  // Usage: time ./smallpt 5000 && xv image.ppm
 #include <iostream>
-
+//#include "omp.h"
 
 struct Vec {
   double x, y, z;                  // position, also color (r,g,b)
@@ -99,7 +99,7 @@ int main(int argc, char *argv[]){
     for (unsigned short x=0, Xi[3]={0,0,(unsigned short)(y*y*y)}; x<w; x++)   // Loop cols
       for (int sy=0, i=(h-y-1)*w+x; sy<2; sy++)     // 2x2 subpixel rows
         for (int sx=0; sx<2; sx++, r=Vec()){        // 2x2 subpixel cols
-        
+        #pragma omp parallel for
            for (int s=0; s<samps; s++){
             double r1=2*erand48(Xi), dx=r1<1 ? sqrt(r1)-1: 1-sqrt(2-r1);
             double r2=2*erand48(Xi), dy=r2<1 ? sqrt(r2)-1: 1-sqrt(2-r2);
